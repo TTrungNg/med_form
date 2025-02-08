@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:med_form/data/med_price.dart';
+import 'package:med_form/widget/med_input_unit.dart';
 
 class MedInputView extends StatefulWidget {
   const MedInputView({super.key});
@@ -9,89 +9,40 @@ class MedInputView extends StatefulWidget {
 }
 
 class _MedInputViewState extends State<MedInputView> {
-  String _displayStringForOption(MapEntry<String, int> med) => med.key;
+  List<TextEditingController> medNameList = [];
+  List<TextEditingController> gList = [];
+
+  void setMedName(int index, String medName) {
+    medNameList[index].text = medName;
+  }
+
+  void setMedG(int index, String g) {
+    gList[index].text = g;
+  }
+
+  void dismissMed(int index) {
+    setState(() {
+      medNameList.removeAt(index);
+      gList.removeAt(index);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  flex: 5,
-                  child: Autocomplete<MapEntry<String, int>>(
-                    displayStringForOption: _displayStringForOption,
-                    optionsBuilder: (TextEditingValue textEditingValue) {
-                      if (textEditingValue.text == '') {
-                        return const Iterable<MapEntry<String, int>>.empty();
-                      }
-                      return med_price.entries.where((MapEntry option) {
-                        return option.key
-                            .toString()
-                            .contains(textEditingValue.text);
-                      });
-                    },
-                    // onSelected: (MapEntry<String, int> selection) {
-                    //   debugPrint(
-                    //       'You just selected ${_displayStringForOption(selection)}');
-                    // },
-                    fieldViewBuilder:
-                        (ctx, textEditingControler, focusNode, onSub) {
-                      return TextField(
-                        focusNode: focusNode,
-                        controller: textEditingControler,
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: 'Tên thuốc'),
-                        onSubmitted: (value) {
-                          if (!med_price.keys.contains(value)) {
-                            textEditingControler.clear();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content:
-                                      Text('Vui lòng nhập đúng tên thuốc')),
-                            );
-                          } else {
-                            debugPrint('Day la luc hanh dong');
-                          }
-                        },
-                        onTapOutside: (event) {
-                          if (!med_price.keys
-                              .contains(textEditingControler.text)) {
-                            textEditingControler.clear();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content:
-                                      Text('Vui lòng nhập đúng tên thuốc')),
-                            );
-                          } else {
-                            debugPrint('Day la luc hanh dong');
-                          }
-                          FocusManager.instance.primaryFocus?.unfocus();
-                        },
-                      );
-                    },
-                  ),
-                ),
-                const SizedBox(
-                  width: 16,
-                ),
-                Expanded(
-                  flex: 1,
-                  child: TextField(
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(), hintText: 'G'),
-                    onSubmitted: (value) {},
-                  ),
-                )
-              ],
-            ),
-            ElevatedButton(
+      appBar: AppBar(
+        title: const Text('Medicine Form'),
+        backgroundColor: const Color.fromARGB(255, 82, 200, 255),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
                 onPressed: () {
+                  debugPrint(medNameList.length.toString());
+                  for (int i = 0; i < medNameList.length; i++) {
+                    debugPrint("Ten thuoc: ${medNameList[i].text}");
+                    debugPrint("So luong: ${gList[i].text}");
+                  }
                   // Navigator.push(
                   //   context,
                   //   MaterialPageRoute(
@@ -118,7 +69,53 @@ class _MedInputViewState extends State<MedInputView> {
                   // );
                   debugPrint('');
                 },
-                child: const Text("In Đơn")),
+                child: const Text('In Đơn')),
+          )
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                itemBuilder: (context, index) {
+                  return Dismissible(
+                      direction: DismissDirection.endToStart,
+                      background: Container(
+                        padding: const EdgeInsets.only(right: 12),
+                        alignment: Alignment.centerRight,
+                        color: Colors.red,
+                        child: const Icon(Icons.delete),
+                      ),
+                      onDismissed: (direction) => dismissMed(index),
+                      key: ValueKey(medNameList[index]),
+                      child: MedInputUnit(
+                        medName: medNameList[index],
+                        g: gList[index],
+                        index: index,
+                      ));
+                },
+                itemCount: medNameList.length,
+              ),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            Center(
+              child: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      medNameList.add(TextEditingController());
+                      gList.add(TextEditingController());
+                    });
+                    debugPrint(gList.length.toString());
+                  },
+                  icon: const Icon(
+                    Icons.add_circle_outline,
+                    size: 36,
+                  )),
+            ),
           ],
         ),
       ),

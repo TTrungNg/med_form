@@ -18,13 +18,7 @@ class MyApp extends StatelessWidget {
             seedColor: const Color.fromARGB(255, 54, 174, 230)),
         useMaterial3: true,
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Medicine Form'),
-          backgroundColor: const Color.fromARGB(255, 82, 200, 255),
-        ),
-        body: const MedInputView(),
-      ),
+      home: const MedInputView(),
     );
   }
 }
