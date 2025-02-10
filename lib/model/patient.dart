@@ -4,19 +4,15 @@ class Patient {
       required this.age,
       required this.diagnosis,
       required this.amountOfDose,
-      required this.medicine});
+      required this.medicine,
+      required this.decoctionPrice,
+      required this.totalInvoice});
 
   final String name;
-  final int age;
+  final String age;
   final String diagnosis;
-  final int amountOfDose;
+  final String amountOfDose;
+  final String decoctionPrice;
+  final String totalInvoice;
   final List<Map<String, dynamic>> medicine;
-
-  int get totalBill {
-    int bill = 0;
-    for (final med in medicine) {
-      bill += (med['total']) as int;
-    }
-    return bill;
-  }
 }

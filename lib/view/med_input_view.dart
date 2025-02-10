@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:med_form/utils/format_invoice.dart';
+import 'package:med_form/view/med_form_display.dart';
 import 'package:med_form/widget/med_input_unit.dart';
+
+import '../model/patient.dart';
 
 class MedInputView extends StatefulWidget {
   const MedInputView({super.key});
@@ -9,8 +13,29 @@ class MedInputView extends StatefulWidget {
 }
 
 class _MedInputViewState extends State<MedInputView> {
+  TextEditingController patientName = TextEditingController();
+  TextEditingController patientAge = TextEditingController();
+  TextEditingController diagnosis = TextEditingController();
+  TextEditingController amountOfDose = TextEditingController();
+  TextEditingController decoctionPrice = TextEditingController();
   List<TextEditingController> medNameList = [];
   List<TextEditingController> gList = [];
+
+  @override
+  void dispose() {
+    patientName.dispose();
+    patientAge.dispose();
+    diagnosis.dispose();
+    amountOfDose.dispose();
+    decoctionPrice.dispose();
+    for (final i in medNameList) {
+      i.dispose();
+    }
+    for (final i in gList) {
+      i.dispose();
+    }
+    super.dispose();
+  }
 
   void setMedName(int index, String medName) {
     medNameList[index].text = medName;
@@ -31,7 +56,7 @@ class _MedInputViewState extends State<MedInputView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Medicine Form'),
+        title: const Text('Nhập thông tin đơn'),
         backgroundColor: const Color.fromARGB(255, 82, 200, 255),
         actions: [
           Padding(
@@ -43,6 +68,22 @@ class _MedInputViewState extends State<MedInputView> {
                     debugPrint("Ten thuoc: ${medNameList[i].text}");
                     debugPrint("So luong: ${gList[i].text}");
                   }
+
+                  Patient patient = FormatInvoice.patientInfor(
+                      patientName,
+                      patientAge,
+                      diagnosis,
+                      amountOfDose,
+                      decoctionPrice,
+                      medNameList,
+                      gList);
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              MedFormDisplay(patient: patient)));
+
                   // Navigator.push(
                   //   context,
                   //   MaterialPageRoute(
@@ -73,12 +114,63 @@ class _MedInputViewState extends State<MedInputView> {
           )
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            children: [
+              TextField(
+                controller: patientName,
+                decoration: const InputDecoration(
+                    border: OutlineInputBorder(), hintText: 'Tên bệnh nhân'),
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              TextField(
+                controller: patientAge,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                    border: OutlineInputBorder(), hintText: 'Tuổi'),
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              TextField(
+                controller: diagnosis,
+                decoration: const InputDecoration(
+                    border: OutlineInputBorder(), hintText: 'Chẩn đoán'),
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      controller: amountOfDose,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(), hintText: 'Số thang'),
+                    ),
+                  ),
+                  const SizedBox(width: 12), // Thêm khoảng cách giữa 2 ô nhập
+                  Expanded(
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      controller: decoctionPrice,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(), hintText: 'Tiền sắc'),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   return Dismissible(
                       direction: DismissDirection.endToStart,
@@ -98,25 +190,25 @@ class _MedInputViewState extends State<MedInputView> {
                 },
                 itemCount: medNameList.length,
               ),
-            ),
-            const SizedBox(
-              height: 12,
-            ),
-            Center(
-              child: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      medNameList.add(TextEditingController());
-                      gList.add(TextEditingController());
-                    });
-                    debugPrint(gList.length.toString());
-                  },
-                  icon: const Icon(
-                    Icons.add_circle_outline,
-                    size: 36,
-                  )),
-            ),
-          ],
+              const SizedBox(
+                height: 12,
+              ),
+              Center(
+                child: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        medNameList.add(TextEditingController());
+                        gList.add(TextEditingController());
+                      });
+                      debugPrint(gList.length.toString());
+                    },
+                    icon: const Icon(
+                      Icons.add_circle_outline,
+                      size: 36,
+                    )),
+              ),
+            ],
+          ),
         ),
       ),
     );
