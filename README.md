@@ -11,3 +11,4 @@ Take patient information as input data and then render a medicine form (image sa
 Function:
 - Auto Complete for Medicine Name:
 
+![AutoComplete Func](images/autoComplete.png)
