@@ -14,7 +14,6 @@ class MedFormDisplay extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Đơn thuốc'),
         actions: [
-          ElevatedButton(onPressed: () {}, child: const Text("Xuất Đơn"))
           ElevatedButton(
               onPressed: () {
                 screenshotController
