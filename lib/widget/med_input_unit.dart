@@ -56,7 +56,7 @@ class _MedInputUnitState extends State<MedInputUnit> {
                   },
                   onSubmitted: (value) {
                     if (!med_price.keys.contains(value)) {
-                      textEditingControler.clear();
+                      widget.medName.clear();
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                             content: Text('Vui lòng nhập đúng tên thuốc')),
@@ -65,7 +65,7 @@ class _MedInputUnitState extends State<MedInputUnit> {
                   },
                   onTapOutside: (event) {
                     if (!med_price.keys.contains(textEditingControler.text)) {
-                      textEditingControler.clear();
+                      widget.medName.clear();
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                             content: Text('Vui lòng nhập đúng tên thuốc')),

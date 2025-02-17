@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:med_form/model/patient.dart';
 import 'package:med_form/data/med_price.dart';
+import 'package:intl/intl.dart';
 
 class FormatInvoice {
   static Patient patientInfor(
@@ -27,8 +28,9 @@ class FormatInvoice {
         'total': total
       });
     }
-
-    int totalInvoice = pricePerDose * int.tryParse(amountOfDose.text)!;
+    int decoctionPriceInt = int.parse(decoctionPrice.text);
+    int priceMed = pricePerDose * int.parse(amountOfDose.text);
+    int totalInvoice = priceMed + decoctionPriceInt;
 
     return Patient(
         name: patientName.text,
@@ -36,7 +38,10 @@ class FormatInvoice {
         diagnosis: diagnosis.text,
         amountOfDose: amountOfDose.text,
         medicine: medicine,
-        decoctionPrice: decoctionPrice.text,
-        totalInvoice: totalInvoice.toString());
+        decoctionPrice:
+            NumberFormat('#,###', 'vi_VN').format(decoctionPriceInt),
+        pricePerDose: pricePerDose.toString(),
+        priceMed: NumberFormat('#,###', 'vi_VN').format(priceMed),
+        totalInvoice: NumberFormat('#,###', 'vi_VN').format(totalInvoice));
   }
 }
