@@ -39,6 +39,15 @@ dependencies:
   image_gallery_saver_plus: ^3.0.5
   screenshot: ^3.0.0
   intl: ^0.20.2
+  flutter_launcher_icons: ^0.14.3
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "images/icon.png"
+  adaptive_icon_background: "images/icon.png"
+  adaptive_icon_foreground: "images/icon.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
 
 dev_dependencies:
   flutter_test:

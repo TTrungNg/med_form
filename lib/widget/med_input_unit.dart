@@ -50,6 +50,7 @@ class _MedInputUnitState extends State<MedInputUnit> {
                       ),
                       border: const OutlineInputBorder(),
                       hintText: 'Tên thuốc'),
+                  textCapitalization: TextCapitalization.sentences,
                   onChanged: (value) {
                     textEditingControler.text = widget.medName.text;
                     //2: Để textEditingControler đồng bộ với medName -> Hiển thị option của Autocomplete

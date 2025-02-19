@@ -28,7 +28,10 @@ class FormatInvoice {
         'total': total
       });
     }
-    int decoctionPriceInt = int.parse(decoctionPrice.text);
+    int decoctionPriceInt = 0;
+    if (decoctionPrice.text.isNotEmpty) {
+      decoctionPriceInt = int.parse(decoctionPrice.text);
+    }
     int priceMed = pricePerDose * int.parse(amountOfDose.text);
     int totalInvoice = priceMed + decoctionPriceInt;
 
